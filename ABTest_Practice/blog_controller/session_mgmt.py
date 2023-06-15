@@ -1,6 +1,7 @@
 from blog_model.mongodb import conn_mongodb
 from datetime import datetime
 
+
 class BlogSession():
     blog_page = {'A': 'blog_A.html', 'B': 'blog_B.html'}
     session_count = 0
@@ -23,10 +24,10 @@ class BlogSession():
         if blog_id == None:
             if BlogSession.session_count == 0:
                 BlogSession.session_count = 1
-                return BlogSession.blog_page[blog_id]
+                return BlogSession.blog_page['A']
             else:
                 BlogSession.session_count = 0
-                return BlogSession.blog_page[blog_id]
+                return BlogSession.blog_page['B']
         else:
             return BlogSession.blog_page[blog_id]
 

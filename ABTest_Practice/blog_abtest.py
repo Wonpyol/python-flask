@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, make_response
+from flask import Flask, jsonify, make_response, session, request
 from flask_login import LoginManager
 from flask_cors import CORS
 
@@ -12,7 +12,7 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 app = Flask(__name__, static_url_path='/static')
 CORS(app)
 # 세션을 별도로 관리 안하기 때문에 고정함
-app.secret_key = 'wonpyol_server1'
+app.secret_key = 'wonpyol_server3'
 app.register_blueprint(blog.blog_abtest, url_prefix='/blog')
 
 login_manager = LoginManager()
@@ -33,5 +33,11 @@ def unauthorized():
     return make_response(jsonify(succes=False), 401)
 
 
+@app.before_request
+def app_before_request():
+    if 'client_id' not in session:
+        session['client_id'] = request.environ.get("HTTP_X_REAL_IP", request.remote_addr)
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8080', debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
